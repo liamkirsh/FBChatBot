@@ -1,6 +1,7 @@
 from collections import namedtuple
 
 from fbchat import Client
+from fbchat.models import ThreadType
 
 
 class Bot(Client):
@@ -36,12 +37,12 @@ class Bot(Client):
             return
 
         is_admin = kwargs['author_id'] in self.admins
-        is_directed = (kwargs['message'].startswith("@" + self.name)
-                       or kwargs['thread_type'] == "USER")
+        is_directed = kwargs['message'].startswith("@" + self.name)
+        is_dm = kwargs['thread_type'] == ThreadType.USER
         if is_directed:
             kwargs['message'] = kwargs['message'].split("@" + self.name)[1].strip()
         kword = kwargs['message'].split(' ', 1)[0].lower()
         cmd = self.commands.get(kword)
         if (cmd and (not cmd.admin or is_admin)
-                and (not cmd.directed or is_directed)):
+                and (not cmd.directed or is_directed or is_dm)):
             cmd.func(kwargs) 
