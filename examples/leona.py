@@ -138,10 +138,9 @@ class LeonaBot(Bot):
             return None
 
     def onPersonRemoved(self, removed_id, author_id, thread_id, **kwargs):
-        if (thread_id == SP_THREAD_ID and
-                removed_id != self.uid and
+        if (removed_id != self.uid and
                 author_id != self.uid and
                 removed_id != author_id and
                 removed_id in self.protected):
             # and author_id not in self.admins):
-            self.addUsersToGroup(removed_id, thread_id=SP_THREAD_ID)
+            self.addUsersToGroup(removed_id, thread_id=thread_id)
