@@ -4,51 +4,51 @@ import sys
 
 import ConfigParser
 
-from leona import LeonaBot
+from leona import LeonaBot as Bot
 
-LEONA_CFG = "settings.cfg"
+CFG = "settings.cfg"
 
 
 def main():
-    l_config = ConfigParser.RawConfigParser()
-    l_session = l_admins = l_protected = l_name = None
-    l_user = l_pass = None
+    config = ConfigParser.RawConfigParser()
+    session = admins = protected = name = None
+    user = pwd = None
 
-    if os.path.exists(LEONA_CFG):
-        with open(LEONA_CFG, 'rb') as f:
-            l_config.readfp(f)
-            if l_config.has_section('session'):
+    if os.path.exists(CFG):
+        with open(CFG, 'rb') as f:
+            config.readfp(f)
+            if config.has_section('session'):
                 # If a session was opened, try to reuse it
-                l_session = dict(l_config.items('session'))
-            if l_config.has_section('roles'):
-                l_admins = l_config.get('roles', 'admins')
-                l_admins = l_admins.split(',')
-                l_protected = l_config.get('roles', 'protected')
-                l_protected = l_protected.split(',')
-            if l_config.has_section('login'):
-                l_user = l_config.get('login', 'user')
-                l_pass = l_config.get('login', 'pass')
-            if l_config.has_section('bot'):
-                l_name = l_config.get('bot', 'name')
+                session = dict(config.items('session'))
+            if config.has_section('roles'):
+                admins = config.get('roles', 'admins')
+                admins = admins.split(',')
+                protected = config.get('roles', 'protected')
+                protected = protected.split(',')
+            if config.has_section('login'):
+                user = config.get('login', 'user')
+                pwd = config.get('login', 'pass')
+            if config.has_section('bot'):
+                name = config.get('bot', 'name')
 
-    if not l_name:
+    if not name:
         raise Exception("You must set the bot's name in the settings file.")
-    l_client = LeonaBot(l_user, l_pass, l_name,
-                        admins=l_admins, protected=l_protected,
-                        session_cookies=l_session)
+    client = Bot(user, pwd, name,
+                        admins=admins, protected=protected,
+                        session_cookies=session)
 
-    if not l_session:
-        l_session = l_client.getSession()
-        with open(LEONA_CFG, 'wb') as f:
+    if not session:
+        session = client.getSession()
+        with open(CFG, 'wb') as f:
             try:
-                l_config.add_section('session')
+                config.add_section('session')
             except ConfigParser.DuplicateSectionError:
                 pass
-            for (k, v) in l_session.items():
-                l_config.set('session', k, v)
-            l_config.write(f)
+            for (k, v) in session.items():
+                config.set('session', k, v)
+            config.write(f)
 
-    l_client.listen()
+    client.listen()
 
 if __name__ == "__main__":
     main()
