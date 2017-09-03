@@ -51,6 +51,8 @@ def main():
             config.write(f)
 
     client.listen()
+    while 1:  # allows script to run as service
+        pass
 
 if __name__ == "__main__":
     main()
