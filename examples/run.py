@@ -6,7 +6,9 @@ import ConfigParser
 
 from leona import LeonaBot as Bot
 
-CFG = "settings.cfg"
+__location__ = os.path.realpath(
+    os.path.join(os.getcwd(), os.path.dirname(__file__)))
+CFG = os.path.join(__location__, 'settings.cfg')
 
 
 def main():

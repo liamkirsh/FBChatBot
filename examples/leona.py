@@ -69,7 +69,7 @@ class LeonaBot(Bot):
             s = s.replace('?', '~q').replace('%', '~p').replace('#', '~h')
             return s
 
-        meme_data = msg['message'].split(' ')
+        meme_data = msg['message'].lower().split(' ')
         if meme_data == ["meme", "help"]:
             self.sendMessage(strings.meme_help,
                              msg['thread_id'], msg['thread_type'])
