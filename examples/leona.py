@@ -79,6 +79,9 @@ class LeonaBot(Bot):
             s = s.replace('?', '~q').replace('%', '~p').replace('#', '~h')
             s = s.replace('/', '~s').replace('"', "''")
             return s
+        def url_format(string, *args):
+            """Encode a URL with given parameters."""
+            return string.format(*(urllib.quote(arg, safe="") for arg in args))
 
         meme_data = msg['message'].lower().split(' ')
         if meme_data == ["meme", "help"]:
@@ -89,15 +92,14 @@ class LeonaBot(Bot):
             meme_text = [t.strip()
                          for t in ' '.join(meme_data[2:]).split('/', 1)]
             top_text = clean(meme_text[0])
-            top_text = urllib.quote(top_text, safe="")
+
             if len(meme_text) > 1:
                 bottom_text = clean(meme_text[1])
-                bottom_text = urllib.quote(bottom_text, safe="")
-                img_url = "https://memegen.link/{}/{}/{}.jpg".format(
-                    meme_type, top_text, bottom_text)
+                img_url = url_format("https://memegen.link/{}/{}/{}.jpg",
+                                     meme_type, top_text, bottom_text)
             else:
-                img_url = "https://memegen.link/{}/{}.jpg".format(
-                    meme_type, top_text)
+                img_url = url_format("https://memegen.link/{}/{}.jpg",
+                                     meme_type, top_text)
             self.sendRemoteImage(img_url, "",
                                  msg['thread_id'], msg['thread_type'])
 
