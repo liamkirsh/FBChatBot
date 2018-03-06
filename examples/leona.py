@@ -4,6 +4,7 @@ import random
 
 import requests
 from fbchat.models import ThreadType, MessageReaction
+from googletrans import Translator
 
 from bot import Bot
 import strings
@@ -27,6 +28,14 @@ class LeonaBot(Bot):
         self.add_message_handler("readd", self.readd_cmd, admin=True)
         self.add_message_handler("trump", self.trump_cmd)
         self.add_message_handler("love", self.love_cmd)
+	self.add_message_handler("translate", self.translate_cmd)
+        self.translator = Translator()
+
+    def translate_cmd(self, msg):
+        """Translate any text to English."""
+        text = msg['message'][10:].strip()
+	result = "Translation: " + self.translator.translate(text).text
+        self.sendMessage(result, msg['thread_id'], msg['thread_type'])
 
     def love_cmd(self, msg):
         """I'll heart react your message."""
