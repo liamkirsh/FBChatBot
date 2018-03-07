@@ -85,7 +85,7 @@ class LeonaBot(Bot):
 
         meme_data = msg['message'].lower().split(' ')
         if meme_data == ["meme", "help"]:
-            self.sendMessage(strings.meme_help,
+            self.sendMessage(strings.get_meme_templates(),
                              msg['thread_id'], msg['thread_type'])
         else:
             meme_type = meme_data[1]
