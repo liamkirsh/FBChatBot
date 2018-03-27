@@ -91,7 +91,8 @@ class LeonaBot(Bot):
             meme_type = meme_data[1]
             meme_text = [t.strip()
                          for t in ' '.join(meme_data[2:]).split('/', 1)]
-            top_text = clean(meme_text[0])
+            # Memegen doesn't accept empty string for top text, so use " " instead
+            top_text = clean(meme_text[0]) or " "
 
             if len(meme_text) > 1:
                 bottom_text = clean(meme_text[1])
